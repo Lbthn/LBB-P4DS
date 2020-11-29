@@ -1,0 +1,93 @@
+---
+title: "LBB P4DS R"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+## Data Loading and Initial Inspection
+```{r cars}
+genderdata <- read.csv("train.csv")
+colSums(is.na(genderdata))
+```
+```{r}
+head(genderdata)
+```
+
+Dari pengamatan data, menunjukkan row age menunjukkan 177 missing value, untuk tujuan dari tugas ini, maka row yang mengandung missing value akan dihapus. Lalu beberapa kolom akan dipakai untuk mencoba melihat survivalbility berdasarkan umur, dan kelas tiket
+
+```{r}
+FixData <- genderdata[c("PassengerId", "Survived", "Pclass", "Sex")]
+head(FixData)
+```
+
+# Data Type Transformation
+
+Kolom Survived, Pclass dan jenis kelamin akan diubah menjadi kategori 
+
+```{r}
+FixData$Survived <- as.factor(FixData$Survived)
+FixData$Pclass <- as.factor(FixData$Pclass)
+FixData$Sex <- as.factor(FixData$Sex)
+str(FixData)
+```
+Pemisahan data antara yang selamat dan yang tidak
+
+
+```{r}
+Survive <- FixData[FixData$Survived == 1,]
+NotSurvived <- FixData[FixData$Survived == 0,]
+```
+
+
+```{r}
+table(Survive$Sex)
+```
+
+
+```{r}
+table(FixData$Sex)
+```
+```{r}
+SurvivalPosMale <- (109/577) *100
+SurvivalPosFemale <- (233/314) *100
+SurvivalPosMale
+SurvivalPosFemale
+```
+
+
+
+
+Berdasarkan data tersebut, wanita memiliki kemungkinan hidup hingga 74%, sedangkan pria hanya 18%
+
+# Berdasarkan Kelas Tiket
+
+Berikutnya akan coba dilihat apakah kelas tiket mempengaruhi tingkat survival, karena seharunya penumpang dengan tiket kelas 1 memiliki akses fasilitan keselamatan yang lebih mumpuni 
+
+```{r}
+table(Survive$Pclass)
+```
+```{r}
+table(FixData$Pclass)
+```
+
+```{r}
+SurvivalP1 <- (136/216) * 100
+SurvivalP2 <- (87/184) * 100
+SurvivalP3 <- (119/491) * 100
+SurvivalP1
+SurvivalP2
+SurvivalP3
+```
+Berdasarkan data yang didapatkan maka dapat disimpulkan bahwa kelas dari Tiket akan mempengaruhi tingkat keselamatan dari para penumpang kapal. Secara berurutan tiket kelas 1 merupakan yang teraman dilanjutkan dengan kelas 2 dan terakhir kelas 3.
+
+## Conclusion
+
+Berdasarkan data yang didapatkan maka kesimpulannya adalah penumpang wanita dan/atau yang memiliki tiket kelas 1 maka akan memiliki kemungkinan hidup yang lebih tinggi dari insiden kapal titanik dibandingkan dengan penumpang lainnya. 
+
+
+
+
